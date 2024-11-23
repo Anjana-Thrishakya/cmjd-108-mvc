@@ -93,9 +93,19 @@ public class ItemView extends javax.swing.JFrame {
 
         btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnUpdate.setText("Update Item");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnDelete.setText("Delete Item");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         tblItem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -201,6 +211,14 @@ public class ItemView extends javax.swing.JFrame {
         searchItem();
     }//GEN-LAST:event_tblItemMouseClicked
 
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        updateItem();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        deleteItem();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
@@ -232,6 +250,38 @@ public class ItemView extends javax.swing.JFrame {
         
         try {
             String resp = itemController.saveItem(itemDto);
+            JOptionPane.showMessageDialog(this, resp);
+            loadTable();
+            clearForm();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    
+    private void updateItem(){
+        ItemDto itemDto = new ItemDto(
+                txtCode.getText(),
+                txtDescription.getText(),
+                txtPack.getText(),
+                Double.parseDouble(txtUnitParice.getText()),
+                Integer.parseInt(txtQoh.getText())
+        );
+        
+        try {
+            String resp = itemController.updateItem(itemDto);
+            JOptionPane.showMessageDialog(this, resp);
+            loadTable();
+            clearForm();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    
+    private void deleteItem(){ 
+        try {
+            String resp = itemController.deleteItem(txtCode.getText());
             JOptionPane.showMessageDialog(this, resp);
             loadTable();
             clearForm();
