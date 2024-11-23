@@ -4,6 +4,8 @@
  */
 package edu.ijse.mvc.view;
 
+import edu.ijse.mvc.dto.ItemDto;
+
 /**
  *
  * @author anjan
@@ -76,6 +78,11 @@ public class ItemView extends javax.swing.JFrame {
 
         btnSave.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnSave.setText("Save Item");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnUpdate.setText("Update Item");
@@ -174,6 +181,10 @@ public class ItemView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        saveItem();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
@@ -193,4 +204,18 @@ public class ItemView extends javax.swing.JFrame {
     private javax.swing.JTextField txtQoh;
     private javax.swing.JTextField txtUnitParice;
     // End of variables declaration//GEN-END:variables
+
+    private void saveItem(){
+        ItemDto itemDto = new ItemDto(
+                txtCode.getText(),
+                txtDescription.getText(),
+                txtPack.getText(),
+                Double.parseDouble(txtUnitParice.getText()),
+                Integer.parseInt(txtQoh.getText())
+        );
+        
+        System.out.println(itemDto.toString());
+        
+    }
+
 }
