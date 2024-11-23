@@ -4,13 +4,17 @@
  */
 package edu.ijse.mvc.view;
 
+import edu.ijse.mvc.controller.ItemController;
 import edu.ijse.mvc.dto.ItemDto;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author anjan
  */
 public class ItemView extends javax.swing.JFrame {
+    
+    private ItemController itemController = new ItemController();
 
     /**
      * Creates new form ItemView
@@ -214,8 +218,13 @@ public class ItemView extends javax.swing.JFrame {
                 Integer.parseInt(txtQoh.getText())
         );
         
-        System.out.println(itemDto.toString());
-        
+        try {
+            String resp = itemController.saveItem(itemDto);
+            JOptionPane.showMessageDialog(this, resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }
 
 }
