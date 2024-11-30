@@ -36,4 +36,9 @@ public class CustomerController {
         String resp = customerModel.updateCustomer(dto);
         return resp;
     }
+
+    public String deleteCustomer(String custId) throws Exception {
+        String resp = customerModel.deleteCustomer(custId);
+        return resp;
+    }
 }
