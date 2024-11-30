@@ -28,6 +28,7 @@ public class CustomerController {
     }
 
     public String saveCustomer(CustomerDto dto) throws Exception{
-        return null;
+        String resp = customerModel.saveCustomer(dto);
+        return resp;
     }
 }
