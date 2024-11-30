@@ -26,4 +26,8 @@ public class CustomerController {
         CustomerDto customerDto = customerModel.getCustomer(custId);
         return customerDto;
     }
+
+    public String saveCustomer(CustomerDto dto) throws Exception{
+        return null;
+    }
 }
