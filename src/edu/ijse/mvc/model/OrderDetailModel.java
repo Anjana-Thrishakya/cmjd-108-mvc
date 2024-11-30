@@ -23,6 +23,6 @@ public class OrderDetailModel {
         statement.setInt(3, dto.getQty());
         statement.setInt(4, dto.getDiscount());
         
-        return statement.executeUpdate() > 0 ? "Successfully Saved" : "Fail";
+        return statement.executeUpdate() > 0 ? "Success" : "Fail";
     }
 }
