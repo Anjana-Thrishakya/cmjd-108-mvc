@@ -21,4 +21,9 @@ public class CustomerController {
         ArrayList<CustomerDto> customerDtos = customerModel.getAll();
         return customerDtos;
     }
+
+    public CustomerDto searchCustomer(String custId) throws Exception{
+        CustomerDto customerDto = customerModel.getCustomer(custId);
+        return customerDto;
+    }
 }

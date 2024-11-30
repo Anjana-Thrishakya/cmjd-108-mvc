@@ -113,6 +113,11 @@ public class CustomerForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblCustomer.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCustomerMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblCustomer);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -224,6 +229,10 @@ public class CustomerForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tblCustomerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomerMouseClicked
+        searchCustomer();
+    }//GEN-LAST:event_tblCustomerMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -310,5 +319,29 @@ public class CustomerForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
         
+    }
+
+    private void searchCustomer() {
+        String custId = tblCustomer.getValueAt(tblCustomer.getSelectedRow(), 0).toString();
+        try {
+            CustomerDto customerDto = customerController.searchCustomer(custId);
+            if(customerDto != null){
+                txtId.setText(customerDto.getId());
+                txtName.setText(customerDto.getName());
+                txtTitle.setText(customerDto.getTitle());
+                txtDob.setText(customerDto.getDob());
+                txtSalary.setText(Double.toString(customerDto.getSalary()));
+                txtAddress.setText(customerDto.getAddress());
+                txtCity.setText(customerDto.getCity());
+                txtProvince.setText(customerDto.getProvince());
+                txtPostalCode.setText(customerDto.getPostalCode());
+            } else {
+                 JOptionPane.showMessageDialog(this, "Customer not Found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+
     }
 }

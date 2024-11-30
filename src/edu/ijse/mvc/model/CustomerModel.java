@@ -36,5 +36,25 @@ public class CustomerModel {
         }
         return customerDtos;
     }
+
+    public CustomerDto getCustomer(String custId) throws Exception {
+        String sql = "SELECT * FROM Customer WHERE CustID = ?";
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, custId);
+        
+        ResultSet rst = statement.executeQuery();
+        
+        if (rst.next()) {            
+            CustomerDto dto = new CustomerDto(
+                    rst.getString("CustID"), rst.getString("CustTitle"),
+                    rst.getString("CustName"), rst.getString("DOB"),
+                    rst.getDouble("salary"), rst.getString("CustAddress"),
+                    rst.getString("City"),
+                    rst.getString("Province"), rst.getString("PostalCode"));
+            return dto;
+        }
+        return null;
+    }
     
 }
