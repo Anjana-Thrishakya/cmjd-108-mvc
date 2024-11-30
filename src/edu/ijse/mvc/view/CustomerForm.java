@@ -4,6 +4,10 @@
  */
 package edu.ijse.mvc.view;
 
+import edu.ijse.mvc.controller.CustomerController;
+import edu.ijse.mvc.dto.CustomerDto;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -11,6 +15,8 @@ import javax.swing.table.DefaultTableModel;
  * @author anjan
  */
 public class CustomerForm extends javax.swing.JFrame {
+    
+    private CustomerController customerController = new CustomerController();
 
     /**
      * Creates new form CustomerForm
@@ -288,5 +294,21 @@ public class CustomerForm extends javax.swing.JFrame {
             }
         };
         tblCustomer.setModel(dtm);
+        try {
+            ArrayList<CustomerDto> customerDtos = customerController.getAllCustomer();
+            for (CustomerDto customerDto : customerDtos) {
+                Object[] rowData = {customerDto.getId(),
+                customerDto.getTitle() + ", " + customerDto.getName(),
+                customerDto.getDob(),
+                customerDto.getSalary(),
+                customerDto.getAddress()+ ", " + customerDto.getCity() + ", " + customerDto.getProvince(),
+                customerDto.getPostalCode()};
+                dtm.addRow(rowData);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        
     }
 }
