@@ -4,6 +4,8 @@
  */
 package edu.ijse.mvc.view;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author anjan
@@ -15,6 +17,7 @@ public class CustomerForm extends javax.swing.JFrame {
      */
     public CustomerForm() {
         initComponents();
+        loadTable();
     }
 
     /**
@@ -276,4 +279,14 @@ public class CustomerForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtSalary;
     private javax.swing.JTextField txtTitle;
     // End of variables declaration//GEN-END:variables
+
+    private void loadTable() {
+        String columns[] = {"Customer Id", "Customer Name", "DOB", "Salary", "Address", "Postal Code"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0){
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblCustomer.setModel(dtm);
+    }
 }
