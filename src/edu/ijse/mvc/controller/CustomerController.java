@@ -31,4 +31,9 @@ public class CustomerController {
         String resp = customerModel.saveCustomer(dto);
         return resp;
     }
+
+    public String updateCustomer(CustomerDto dto)  throws Exception {
+        String resp = customerModel.updateCustomer(dto);
+        return resp;
+    }
 }

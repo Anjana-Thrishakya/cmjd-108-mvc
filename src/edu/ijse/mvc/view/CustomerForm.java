@@ -103,6 +103,11 @@ public class CustomerForm extends javax.swing.JFrame {
 
         btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnDelete.setText("Delete");
@@ -241,6 +246,10 @@ public class CustomerForm extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         saveCustomer();
     }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        updateCustomer();
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -387,5 +396,27 @@ public class CustomerForm extends javax.swing.JFrame {
         txtProvince.setText("");
         txtSalary.setText("");
         txtTitle.setText("");
+    }
+
+    private void updateCustomer() {
+        CustomerDto dto = new CustomerDto(
+                txtId.getText(), 
+                txtTitle.getText(), 
+                txtName.getText(), 
+                txtDob.getText(), 
+                Double.parseDouble(txtSalary.getText()),
+                txtAddress.getText(),
+                txtCity.getText(),
+                txtProvince.getText(),
+                txtPostalCode.getText());
+        try {
+            String resp = customerController.updateCustomer(dto);
+            JOptionPane.showMessageDialog(this, resp);
+            loadTable();
+            cleanForm();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }
 }
