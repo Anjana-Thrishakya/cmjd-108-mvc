@@ -6,10 +6,14 @@ package edu.ijse.mvc.view;
 
 import edu.ijse.mvc.controller.CustomerController;
 import edu.ijse.mvc.controller.ItemController;
+import edu.ijse.mvc.controller.OrderController;
 import edu.ijse.mvc.dto.CustomerDto;
 import edu.ijse.mvc.dto.ItemDto;
 import edu.ijse.mvc.dto.OrderDetailDto;
+import edu.ijse.mvc.dto.OrderDto;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -23,6 +27,7 @@ public class OrderForm extends javax.swing.JFrame {
     
     private CustomerController customerController = new CustomerController();
     private ItemController itemController = new ItemController();
+    private OrderController orderController = new OrderController();
     
     private ArrayList<OrderDetailDto> orderDetailDtos = new ArrayList<>();
 
@@ -31,8 +36,8 @@ public class OrderForm extends javax.swing.JFrame {
      */
     public OrderForm() {
         initComponents();
-        loadTable(); 
-   }
+        loadTable();        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -123,6 +128,11 @@ public class OrderForm extends javax.swing.JFrame {
 
         btnPlaceOrder.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnPlaceOrder.setText("Place Order");
+        btnPlaceOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlaceOrderActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -222,7 +232,10 @@ public class OrderForm extends javax.swing.JFrame {
         addTotable();
     }//GEN-LAST:event_btnAddActionPerformed
 
-    
+    private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
+        placeOrder();
+    }//GEN-LAST:event_btnPlaceOrderActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -250,8 +263,8 @@ public class OrderForm extends javax.swing.JFrame {
         try {
             String custId = txtCustId.getText();
             CustomerDto customerDto = customerController.searchCustomer(custId);
-            if(customerDto != null){
-                lblCustDetails.setText(customerDto.getId() + " | " + customerDto.getTitle() + ". " +  customerDto.getName());
+            if (customerDto != null) {
+                lblCustDetails.setText(customerDto.getId() + " | " + customerDto.getTitle() + ". " + customerDto.getName());
             } else {
                 lblCustDetails.setText("Customer Not Found");
             }
@@ -260,13 +273,13 @@ public class OrderForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
-
+    
     private void searchItem() {
         try {
             String itemCode = txtItem.getText();
             ItemDto itemDto = itemController.searchItem(itemCode);
-            if(itemDto != null){
-                lblItemDetails.setText(itemDto.getCode()+ " | " + itemDto.getDescription()+ " | " +  itemDto.getPackSize() + " | " + itemDto.getQoh());
+            if (itemDto != null) {
+                lblItemDetails.setText(itemDto.getCode() + " | " + itemDto.getDescription() + " | " + itemDto.getPackSize() + " | " + itemDto.getQoh());
             } else {
                 lblItemDetails.setText("Item Not Found");
             }
@@ -275,22 +288,22 @@ public class OrderForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
-
+    
     private void loadTable() {
         String columns[] = {"Item Code", "Qty", "Discount"};
-        DefaultTableModel dtm = new DefaultTableModel(columns, 0){
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
-            }  
+            }            
         };
         
         tblCart.setModel(dtm);
     }
-
+    
     private void addTotable() {
         OrderDetailDto orderDetailDto = new OrderDetailDto(null,
-                txtItem.getText(), 
+                txtItem.getText(),
                 Integer.parseInt(txtQty.getText()),
                 Double.parseDouble(txtDicount.getText()));
         
@@ -298,5 +311,34 @@ public class OrderForm extends javax.swing.JFrame {
         DefaultTableModel dtm = (DefaultTableModel) tblCart.getModel();
         dtm.addRow(rowData);
         orderDetailDtos.add(orderDetailDto);
+        
+        clearItemData();
+    }
+    
+    private void clearItemData() {
+        txtItem.setText("");
+        txtDicount.setText("");
+        txtQty.setText("");
+        lblItemDetails.setText("");
+    }
+    
+    private void placeOrder() {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String date = sdf.format(new Date());
+            OrderDto orderDto = new OrderDto(
+                    txtOrderId.getText(),
+                    txtCustId.getText(),
+                    date);
+            for (OrderDetailDto orderDetailDto : orderDetailDtos) {
+                orderDetailDto.setOrderId(orderDto.getOrderId());
+            }
+            String resp = orderController.placeOrder(orderDto, orderDetailDtos);
+            JOptionPane.showMessageDialog(this, resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        
     }
 }
