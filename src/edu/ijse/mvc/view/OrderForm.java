@@ -5,7 +5,9 @@
 package edu.ijse.mvc.view;
 
 import edu.ijse.mvc.controller.CustomerController;
+import edu.ijse.mvc.controller.ItemController;
 import edu.ijse.mvc.dto.CustomerDto;
+import edu.ijse.mvc.dto.ItemDto;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -17,6 +19,7 @@ import javax.swing.JOptionPane;
 public class OrderForm extends javax.swing.JFrame {
     
     private CustomerController customerController = new CustomerController();
+    private ItemController itemController = new ItemController();
 
     /**
      * Creates new form OrderForm
@@ -79,6 +82,11 @@ public class OrderForm extends javax.swing.JFrame {
 
         btnSearchItem.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnSearchItem.setText("Search");
+        btnSearchItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchItemActionPerformed(evt);
+            }
+        });
 
         lblQty.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblQty.setText("Qty");
@@ -195,6 +203,10 @@ public class OrderForm extends javax.swing.JFrame {
         searchCustomer();
     }//GEN-LAST:event_btnSearchCustomerActionPerformed
 
+    private void btnSearchItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchItemActionPerformed
+        searchItem();
+    }//GEN-LAST:event_btnSearchItemActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -227,6 +239,21 @@ public class OrderForm extends javax.swing.JFrame {
                 lblCustDetails.setText(customerDto.getId() + " | " + customerDto.getTitle() + ". " +  customerDto.getName());
             } else {
                 lblCustDetails.setText("Customer Not Found");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+
+    private void searchItem() {
+        try {
+            String itemCode = txtItem.getText();
+            ItemDto itemDto = itemController.searchItem(itemCode);
+            if(itemDto != null){
+                lblItemDetails.setText(itemDto.getCode()+ " | " + itemDto.getDescription()+ " | " +  itemDto.getPackSize() + " | " + itemDto.getQoh());
+            } else {
+                lblItemDetails.setText("Item Not Found");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
